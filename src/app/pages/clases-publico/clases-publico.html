@@ -1,0 +1,170 @@
+<div class="clases-page">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">LR JAS</div>
+    <div class="nav-links">
+      <a routerLink="/">Inicio</a>
+      <a routerLink="/registro" class="btn-reservar">Registrarse</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-header">
+      <span class="hero-label">Nuestras Clases</span>
+      <h1>ELIGE TU <span class="highlight">CLASE</span></h1>
+      <p>Selecciona la clase que deseas tomar y regístrate para apartar tu lugar.</p>
+    </div>
+  </section>
+
+  <!-- CLASES -->
+  <section class="clases-section">
+    <div *ngIf="cargando" class="estado-carga">Cargando clases...</div>
+    <div *ngIf="errorGeneral" class="estado-error">{{ errorGeneral }}</div>
+    <div *ngIf="!cargando && clasesDisponibles.length === 0 && !errorGeneral" class="estado-vacio">No hay clases disponibles por el momento.</div>
+    <div class="clases-grid" *ngIf="!cargando && clasesDisponibles.length > 0">
+      <div *ngFor="let clase of clasesDisponibles" class="clase-card">
+        <h3>{{ clase.nombre }}</h3>
+        <p class="clase-descripcion">{{ clase.descripcion }}</p>
+        
+        <div class="clase-info">
+          <div class="clase-info-item">
+            <span class="info-label">Instructor:</span>
+            <span class="info-value">{{ clase.instructor }}</span>
+          </div>
+          <div class="clase-info-item">
+            <span class="info-label">Horario:</span>
+            <span class="info-value">{{ clase.horario }}</span>
+          </div>
+          <div class="clase-info-item">
+            <span class="info-label">Días:</span>
+            <span class="info-value">{{ clase.dias }}</span>
+          </div>
+          <div class="clase-info-item">
+            <span class="info-label">Cupo:</span>
+            <span class="info-value">{{ clase.inscritos }}/{{ clase.cupo_total }}</span>
+          </div>
+        </div>
+        
+        <button
+          class="btn-inscribir"
+          (click)="abrirModal(clase)"
+          [disabled]="clase.inscritos >= clase.cupo_total"
+        >
+          {{ clase.inscritos >= clase.cupo_total ? 'Cupo Lleno' : 'Inscribirme' }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL DE INSCRIPCIÓN -->
+  <div *ngIf="claseSeleccionada" class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal">
+      <button class="modal-close" (click)="cerrarModal()">×</button>
+      
+      <!-- Formulario de inscripción -->
+      <ng-container *ngIf="!inscripcionExitosa">
+        <div class="modal-header">
+          <span class="modal-label">Inscripción a Clase</span>
+          <h2>{{ claseSeleccionada.nombre }}</h2>
+        </div>
+
+        <div class="modal-body">
+
+          <!-- Buscador: solo visible si no hay persona seleccionada -->
+          <ng-container *ngIf="!personaSeleccionada">
+            <label class="input-label">Busca tu nombre</label>
+            <input
+              type="text"
+              class="input-busqueda"
+              placeholder="Escribe tu nombre..."
+              [(ngModel)]="busqueda"
+            />
+
+            <div *ngIf="busqueda.trim()" class="personas-lista">
+              <ng-container *ngIf="personasFiltradas.length > 0; else noResultados">
+                <div
+                  *ngFor="let persona of personasFiltradas"
+                  class="persona-item"
+                  [class.ya-inscrito]="yaInscrito(persona.id)"
+                  (click)="seleccionarPersona(persona)"
+                >
+                  <div class="persona-info">
+                    <span class="persona-nombre">
+                      {{ persona.nombreCompleto }}
+                      <span class="persona-telefono">···{{ ultimos4(persona.telefono) }}</span>
+                    </span>
+                    <span class="persona-detalle">{{ persona.barrio }}, Estaca {{ persona.estaca }}</span>
+                    <span *ngIf="yaInscrito(persona.id)" class="tag-ya-inscrito">Ya inscrito en esta clase</span>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noResultados>
+                <div class="no-resultados">
+                  <p>No se encontraron resultados</p>
+                  <a routerLink="/registro" class="link-registro">¿No estás registrado? Regístrate aquí</a>
+                </div>
+              </ng-template>
+            </div>
+
+            <!-- Sin registros en localStorage -->
+            <div *ngIf="personasRegistradas.length === 0 && !busqueda.trim()" class="no-registros-hint">
+              <p>Aún no hay personas registradas.</p>
+              <a routerLink="/registro" class="link-registro">Regístrate aquí primero</a>
+            </div>
+          </ng-container>
+
+          <!-- Resumen persona seleccionada -->
+          <div *ngIf="personaSeleccionada" class="persona-seleccionada-resumen">
+            <div class="resumen-header">
+              <span class="resumen-titulo">Persona seleccionada</span>
+              <button class="btn-cambiar" (click)="limpiarSeleccion()">✎ Cambiar</button>
+            </div>
+            <div class="resumen-row">
+              <span class="resumen-label">Nombre</span>
+              <strong>
+                {{ personaSeleccionada.nombreCompleto }}
+                <span class="persona-telefono">···{{ ultimos4(personaSeleccionada.telefono) }}</span>
+              </strong>
+            </div>
+            <div class="resumen-row">
+              <span class="resumen-label">Unidad</span>
+              <strong>{{ personaSeleccionada.barrio }}, Estaca {{ personaSeleccionada.estaca }}</strong>
+            </div>
+            <div class="resumen-row">
+              <span class="resumen-label">Membresía</span>
+              <strong [class]="personaSeleccionada.esMiembro ? 'tag-miembro' : 'tag-investigador'">
+                {{ personaSeleccionada.esMiembro ? 'Miembro' : 'Investigador' }}
+              </strong>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn-primary"
+            (click)="handleInscribir()"
+            [disabled]="!personaSeleccionada || yaInscritoSeleccionado"
+          >
+            {{ yaInscritoSeleccionado ? 'Ya inscrito en esta clase' : 'Confirmar Inscripción' }}
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Inscripción exitosa -->
+      <div *ngIf="inscripcionExitosa" class="inscripcion-exitosa">
+        <div class="success-icon">✓</div>
+        <h2>¡Inscripción Exitosa!</h2>
+        <p><strong>{{ personaSeleccionada?.nombreCompleto }}</strong> ha sido inscrito en <strong>{{ claseSeleccionada.nombre }}</strong></p>
+        <button class="btn-primary" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>LR JAS Monterrey &mdash; Cerralvo 120, Col. Libertad</span>
+    <a routerLink="/admin" class="admin-link">Administración</a>
+  </footer>
+</div>

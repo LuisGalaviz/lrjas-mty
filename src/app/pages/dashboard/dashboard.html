@@ -1,0 +1,136 @@
+<div class="dashboard">
+
+  <div class="dash-header">
+    <div>
+      <h1>Panel General</h1>
+      <p>LR JAS Monterrey</p>
+    </div>
+    <div class="header-actions">
+      <span class="fecha">{{ today | date:'EEEE, d MMMM yyyy' }}</span>
+      <button class="btn-refresh" (click)="cargar()">↻ Actualizar</button>
+      <button class="btn-logout" (click)="logout()">Cerrar sesion</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let s of stats" [style.border-color]="s.color">
+      <span class="stat-valor" [style.color]="s.color">{{ s.valor }}</span>
+      <span class="stat-label">{{ s.label }}</span>
+    </div>
+  </div>
+
+  <!-- ASISTENCIAS HOY -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Asistencias de hoy</h2>
+      <span class="badge">{{ asistenciasHoy.length }}</span>
+    </div>
+    <div class="tabla">
+      <div class="tabla-header">
+        <span>Nombre</span>
+        <span>Motivo</span>
+        <span>Hora</span>
+      </div>
+      <div class="tabla-row" *ngFor="let a of asistenciasHoy">
+        <span class="nombre">{{ a.nombre }}</span>
+        <span class="tag-motivo">{{ a.motivo }}</span>
+        <span class="hora">{{ formatFecha(a.fecha) }}</span>
+      </div>
+      <div class="empty" *ngIf="asistenciasHoy.length === 0">
+        Sin asistencias hoy
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAFICAS ROW -->
+  <div class="graficas-row">
+
+    <!-- Motivos -->
+    <div class="section grafica-card">
+      <h2>Motivos de visita</h2>
+      <p class="grafica-sub">Total: {{ asistencias.length }} asistencias</p>
+      <div class="bar-list" *ngIf="motivosChart.length > 0; else sinDatos">
+        <div class="bar-item" *ngFor="let m of motivosChart">
+          <div class="bar-label">
+            <span>{{ m.motivo }}</span>
+            <span class="bar-num">{{ m.cantidad }}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="m.pct" style="background: var(--naranja)"></div>
+          </div>
+        </div>
+      </div>
+      <ng-template #sinDatos><p class="empty">Sin datos aún</p></ng-template>
+    </div>
+
+    <!-- Clases -->
+    <div class="section grafica-card">
+      <h2>Inscripciones por clase</h2>
+      <p class="grafica-sub">Total: {{ inscripciones.length }} inscripciones</p>
+      <div class="bar-list" *ngIf="clasesChart.length > 0; else sinDatos2">
+        <div class="bar-item" *ngFor="let c of clasesChart">
+          <div class="bar-label">
+            <span>{{ c.clase }}</span>
+            <span class="bar-num">{{ c.cantidad }}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" [style.width.%]="c.pct" style="background: #3b82f6"></div>
+          </div>
+        </div>
+      </div>
+      <ng-template #sinDatos2><p class="empty">Sin datos aún</p></ng-template>
+    </div>
+
+  </div>
+
+  <!-- ULTIMAS ASISTENCIAS -->
+  <div class="section">
+    <h2>Últimas asistencias</h2>
+    <div class="tabla">
+      <div class="tabla-header">
+        <span>Nombre</span>
+        <span>Motivo</span>
+        <span>Fecha</span>
+      </div>
+      <div class="tabla-row" *ngFor="let a of ultimasAsistencias">
+        <span class="nombre">{{ a.nombre }}</span>
+        <span class="tag-motivo">{{ a.motivo }}</span>
+        <span class="hora">{{ formatFecha(a.fecha) }}</span>
+      </div>
+      <div class="empty" *ngIf="ultimasAsistencias.length === 0">
+        Sin registros todavía
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONAS REGISTRADAS -->
+  <div class="section">
+    <h2>Personas registradas</h2>
+    <div class="tabla">
+      <div class="tabla-header">
+        <span>Nombre</span>
+        <span>Estaca</span>
+        <span>Barrio</span>
+        <span>Miembro</span>
+      </div>
+      <div class="tabla-row" *ngFor="let r of registros">
+        <span class="nombre">{{ r.nombre }} {{ r.apellidos }}</span>
+        <span>{{ r.estaca }}</span>
+        <span>{{ r.barrio }}</span>
+        <span class="tag-motivo" [style.background]="r.esMiembro ? '#22c55e22' : '#f0f0f0'">
+          {{ r.esMiembro ? 'Miembro' : 'Investigador' }}
+        </span>
+      </div>
+      <div class="empty" *ngIf="registros.length === 0">
+        Sin registros todavía
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-actions">
+    <a routerLink="/" class="btn-secondary">Ver sitio público</a>
+    <button class="btn-logout" (click)="logout()">Cerrar sesion</button>
+  </div>
+
+</div>

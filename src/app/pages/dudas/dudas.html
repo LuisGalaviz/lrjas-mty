@@ -1,0 +1,90 @@
+<div class="dudas-page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">LR JAS</div>
+    <div class="nav-links">
+      <a routerLink="/">Inicio</a>
+      <a routerLink="/registro" class="btn-reservar">Registrarse</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-header">
+      <span class="hero-label">Bienvenido</span>
+      <h1>ES TU PRIMERA <span class="highlight">VEZ?</span></h1>
+      <p>Aqui te explicamos paso a paso como registrarte e inscribirte a una clase. Es sencillo y rapido.</p>
+    </div>
+  </section>
+
+  <!-- TUTORIAL -->
+  <section class="tutorial-section">
+    <div class="tutorial-container">
+
+      <div class="seccion-titulo">
+        <span class="seccion-label">Como empezar</span>
+        <h2>SIGUE ESTOS PASOS</h2>
+      </div>
+
+      <div class="pasos-lista">
+        <div
+          *ngFor="let paso of pasos"
+          class="paso-card"
+          [class.abierto]="pasoActivo === paso.numero"
+          (click)="togglePaso(paso.numero)"
+        >
+          <div class="paso-header">
+            <div class="paso-izquierda">
+              <div class="paso-numero">{{ paso.numero }}</div>
+              <span class="paso-titulo">{{ paso.titulo }}</span>
+            </div>
+            <span class="paso-chevron">{{ pasoActivo === paso.numero ? '−' : '+' }}</span>
+          </div>
+
+          <div class="paso-body" *ngIf="pasoActivo === paso.numero">
+            <p class="paso-descripcion">{{ paso.descripcion }}</p>
+            <a [routerLink]="paso.ruta" class="btn-paso">{{ paso.accion }}</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider"></div>
+
+  <!-- WHATSAPP -->
+  <section class="whatsapp-section">
+    <div class="whatsapp-container">
+
+      <div class="whatsapp-texto">
+        <span class="seccion-label">Comunidad</span>
+        <h2>UNETE AL GRUPO</h2>
+        <p>
+          Escanea el codigo QR con tu telefono para unirte al grupo de WhatsApp del LR JAS Monterrey.
+          Ahi compartimos avisos, horarios, cambios y novedades de las actividades.
+        </p>
+        <p class="whatsapp-sub">
+          El grupo es moderado. Se espera un trato respetuoso entre todos los miembros.
+        </p>
+      </div>
+
+      <div class="qr-bloque">
+        <div class="qr-placeholder">
+          <span class="qr-label">QR proximamente</span>
+        </div>
+        <span class="qr-hint">Apunta la camara de tu telefono al codigo</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span>LR JAS Monterrey &mdash; Cerralvo 120, Col. Libertad</span>
+    <a routerLink="/admin" class="admin-link">Administracion</a>
+  </footer>
+
+</div>

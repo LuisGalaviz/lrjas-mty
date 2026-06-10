@@ -1,0 +1,102 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fondo);
+}
+
+.login-card {
+  background: var(--fondo);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-top: 3px solid var(--oscuro);
+  padding: 3.5rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--naranja);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 0.15rem;
+}
+
+.login-sub {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.6rem;
+  color: rgba(0,0,0,0.35);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-family: 'Oswald', sans-serif;
+  color: var(--oscuro);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: rgba(0,0,0,0.4);
+  margin-bottom: 2.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.form-group { margin-bottom: 1rem; }
+
+input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  color: var(--oscuro);
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: 'Source Sans 3', sans-serif;
+  letter-spacing: 1px;
+  border-radius: 2px;
+}
+
+input:focus { border-color: var(--naranja); }
+input::placeholder { color: rgba(0,0,0,0.3); }
+
+.error {
+  color: #c0392b;
+  font-size: 0.68rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--naranja);
+  color: #fff;
+  border: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: 'Oswald', sans-serif;
+  border-radius: 3px;
+}
+
+.btn-login:hover { background: var(--naranja-oscuro); }

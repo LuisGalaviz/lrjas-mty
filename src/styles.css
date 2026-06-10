@@ -1,1 +1,74 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap');
+/* En styles.css global */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600&family=Lora:ital@1&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Paleta LR JAS */
+  --naranja:        #E8671A;
+  --naranja-oscuro: #C4540F;
+  --naranja-claro:  #F07B30;
+  --crema:          #F9F3EA;
+  --crema-oscuro:   #EDE4D4;
+  --crema-borde:    #D9CEBC;
+  --cafe:           #6B4A2A;
+  --cafe-claro:     #9A7050;
+  --blanco:         #FFFFFF;
+  --oscuro:         #1C1208;
+  --texto:          #2E1A0A;
+  --texto-suave:    #7A6050;
+  --fondo:          #F9F3EA;
+  --borde:          #D9CEBC;
+
+  /* Sidebar oscuro */
+  --sidebar-bg:     #1C1208;
+  --sidebar-borde:  rgba(232,103,26,0.2);
+}
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-weight: 400;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+em, .serif {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--crema-oscuro); }
+::-webkit-scrollbar-thumb { background: var(--naranja); border-radius: 2px; }
+
+.btn-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--texto-suave);
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600;
+}
+
+.btn-volver:hover { color: var(--naranja); }

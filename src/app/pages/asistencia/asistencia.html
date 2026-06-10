@@ -1,0 +1,143 @@
+<div class="registro-page">
+
+  <nav class="top-nav">
+    <a routerLink="/" class="btn-volver">← Volver</a>
+    <span class="nav-title">LR JAS</span>
+    <span></span>
+  </nav>
+
+  <!-- CONFIRMACION -->
+  <div class="confirmacion" *ngIf="enviado">
+    <div class="confirm-icon">✓</div>
+    <h2>Asistencia registrada</h2>
+    <p>Hola <strong>{{ personaSeleccionada?.nombreCompleto }}</strong>, tu asistencia ha sido registrada correctamente.</p>
+    <p class="confirm-sub">{{ motivoSeleccionado }}</p>
+    <div class="confirm-actions">
+      <button class="btn-primary" (click)="resetear()">Registrar otra</button>
+      <a routerLink="/" class="btn-secondary">Volver al inicio</a>
+    </div>
+  </div>
+
+  <div class="form-container" *ngIf="!enviado">
+
+    <div class="form-header">
+      <span class="form-badge">Lugar de Reunion JAS Monterrey</span>
+      <h1>Registrar<br>Asistencia</h1>
+      <p>Marca tu presencia de hoy</p>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="pasos">
+      <div class="paso-item" [class.activo]="paso >= 1" [class.completo]="paso > 1">
+        <div class="paso-num">{{ paso > 1 ? '✓' : '1' }}</div>
+        <span>Tu nombre</span>
+      </div>
+      <div class="paso-linea" [class.activo]="paso > 1"></div>
+      <div class="paso-item" [class.activo]="paso >= 2">
+        <div class="paso-num">2</div>
+        <span>Motivo</span>
+      </div>
+    </div>
+
+    <!-- PASO 1: BUSQUEDA -->
+    <div class="form-step" *ngIf="paso === 1">
+
+      <div class="form-group busqueda-wrapper">
+        <label>Busca tu nombre</label>
+        <div class="input-con-icono">
+          <input
+            type="text"
+            [(ngModel)]="busqueda"
+            (ngModelChange)="onBusquedaChange()"
+            placeholder="Escribe tu nombre o apellido..."
+            autocomplete="off"
+          />
+          <button class="input-clear" *ngIf="busqueda" (click)="limpiarSeleccion()">✕</button>
+        </div>
+
+        <!-- Lista de sugerencias con 4 dígitos -->
+        <div class="sugerencias-lista" *ngIf="mostrarLista && personasFiltradas.length > 0 && !personaSeleccionada">
+          <div
+            class="sugerencia-item"
+            *ngFor="let p of personasFiltradas"
+            (click)="elegirPersona(p)"
+          >
+            <span class="sug-nombre">{{ p.nombreCompleto }}</span>
+            <span class="sug-tel">···· {{ p.ultimos4 }}</span>
+          </div>
+        </div>
+
+        <!-- Sin resultados -->
+        <div class="sin-resultado" *ngIf="mostrarLista && busqueda.trim().length >= 2 && personasFiltradas.length === 0 && !personaSeleccionada">
+          <p>No encontrado. ¿Aún no te has registrado?</p>
+          <a routerLink="/registro">Registrarme aquí →</a>
+        </div>
+      </div>
+
+      <!-- Persona confirmada -->
+      <div class="persona-seleccionada" *ngIf="personaSeleccionada">
+        <div class="ps-info">
+          <span class="ps-check">✓</span>
+          <div class="ps-datos">
+            <span class="ps-nombre">{{ personaSeleccionada.nombreCompleto }}</span>
+            <span class="ps-tel">···· {{ personaSeleccionada.ultimos4 }}</span>
+          </div>
+        </div>
+        <button class="ps-cambiar" (click)="limpiarSeleccion()">Cambiar</button>
+      </div>
+
+      <div class="estaca-placeholder" *ngIf="!busqueda && !personaSeleccionada">
+        <p>Escribe al menos 2 letras de tu nombre para buscarte</p>
+      </div>
+
+      <div class="form-actions">
+        <span></span>
+        <button class="btn-primary" (click)="siguientePaso()" [disabled]="!puedeAvanzar">
+          Siguiente →
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 2: MOTIVO -->
+    <div class="form-step" *ngIf="paso === 2">
+
+      <div class="form-group">
+        <label>¿Por qué viniste hoy?</label>
+        <div class="motivos-grid">
+          <label
+            class="radio-option"
+            *ngFor="let m of motivosDisponibles"
+            [class.selected]="motivoSeleccionado === m"
+            (click)="$event.preventDefault(); motivoSeleccionado = m"
+          >
+            <span class="motivo-dot" [class.activo]="motivoSeleccionado === m"></span>
+            {{ m }}
+          </label>
+        </div>
+      </div>
+
+      <div class="resumen" *ngIf="motivoSeleccionado">
+        <div class="resumen-item">
+          <span>Persona</span>
+          <strong>{{ personaSeleccionada?.nombreCompleto }}</strong>
+        </div>
+        <div class="resumen-item">
+          <span>Motivo</span>
+          <strong class="tag-miembro">{{ motivoSeleccionado }}</strong>
+        </div>
+        <div class="resumen-item">
+          <span>Fecha</span>
+          <strong>Hoy</strong>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-secondary" (click)="paso = 1">← Atras</button>
+        <button class="btn-primary" (click)="guardar()" [disabled]="!motivoSeleccionado">
+          Confirmar asistencia
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="ac-page">
+
+  <!-- HEADER -->
+  <div class="ac-header">
+    <div>
+      <h1>Clases</h1>
+      <p>Administra las clases disponibles para el público</p>
+    </div>
+    <div class="ac-header-actions">
+      <button class="btn-refresh" (click)="cargar()" title="Recargar">↺ Actualizar</button>
+      <button class="btn-nueva" (click)="abrirCrear()">+ Nueva clase</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN -->
+  <div class="notificacion" *ngIf="notificacion">{{ notificacion }}</div>
+
+  <!-- GRID DE CLASES -->
+  <div class="clases-grid" *ngIf="clases.length > 0">
+    <div class="clase-card" *ngFor="let clase of clases">
+
+      <div class="card-top">
+        <div class="card-id">#{{ clase.id }}</div>
+        <div class="card-actions">
+          <button class="btn-edit" (click)="abrirEditar(clase)" title="Editar">✎</button>
+          <button class="btn-delete" (click)="pedirConfirmacion(clase)" title="Eliminar">✕</button>
+        </div>
+      </div>
+
+      <h3 class="card-nombre">{{ clase.nombre }}</h3>
+      <p class="card-desc">{{ clase.descripcion }}</p>
+
+      <div class="card-info">
+        <div class="info-row"><span class="info-lbl">Instructor</span><span>{{ clase.instructor }}</span></div>
+        <div class="info-row"><span class="info-lbl">Horario</span><span>{{ clase.horario }}</span></div>
+        <div class="info-row"><span class="info-lbl">Días</span><span>{{ clase.dias }}</span></div>
+      </div>
+
+      <div class="cupo-wrap">
+        <div class="cupo-label">
+          <span>Cupo</span>
+          <span class="cupo-num">{{ clase.inscritos }}/{{ clase.cupoTotal }}</span>
+        </div>
+        <div class="cupo-bar">
+          <div class="cupo-fill" [class.lleno]="clase.inscritos >= clase.cupoTotal" [style.width.%]="inscritosPct(clase)"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="clases.length === 0">
+    <p>No hay clases registradas.</p>
+    <button class="btn-nueva" (click)="abrirCrear()">+ Crear primera clase</button>
+  </div>
+
+
+  <!-- ===== MODAL CREAR / EDITAR ===== -->
+  <div *ngIf="modalAbierto" class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal">
+      <button class="modal-close" (click)="cerrarModal()">×</button>
+
+      <div class="modal-header">
+        <h2>{{ modoEdicion ? 'Editar clase' : 'Nueva clase' }}</h2>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Errores -->
+        <div class="errores" *ngIf="errores.length > 0">
+          <p *ngFor="let e of errores">• {{ e }}</p>
+        </div>
+
+        <div class="campo">
+          <label>Nombre *</label>
+          <input type="text" [(ngModel)]="claseEditando.nombre" placeholder="Ej: Libro de Mormón" />
+        </div>
+
+        <div class="campo">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="claseEditando.descripcion" rows="2" placeholder="Breve descripción de la clase"></textarea>
+        </div>
+
+        <div class="campos-fila">
+          <div class="campo">
+            <label>Instructor *</label>
+            <input type="text" [(ngModel)]="claseEditando.instructor" placeholder="Ej: Hno. García" />
+          </div>
+          <div class="campo">
+            <label>Cupo total *</label>
+            <input type="number" [(ngModel)]="claseEditando.cupoTotal" min="1" placeholder="25" />
+          </div>
+        </div>
+
+        <div class="campos-fila">
+          <div class="campo">
+            <label>Horario *</label>
+            <input type="text" [(ngModel)]="claseEditando.horario" placeholder="Ej: 19:00 - 20:30" />
+          </div>
+          <div class="campo">
+            <label>Días *</label>
+            <input type="text" [(ngModel)]="claseEditando.dias" placeholder="Ej: Lunes y Miércoles" />
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" (click)="guardar()">
+          {{ modoEdicion ? 'Guardar cambios' : 'Crear clase' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== MODAL CONFIRMACIÓN ELIMINAR ===== -->
+  <div *ngIf="claseAEliminar" class="modal-overlay">
+    <div class="modal modal-confirm">
+      <div class="confirm-icon">⚠</div>
+      <h3>¿Eliminar "{{ claseAEliminar.nombre }}"?</h3>
+      <p>Se eliminarán también todas las inscripciones relacionadas ({{ claseAEliminar.inscritos }} inscritos). Esta acción no se puede deshacer.</p>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cancelarEliminar()">Cancelar</button>
+        <button class="btn-danger" (click)="confirmarEliminar()">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+</div>

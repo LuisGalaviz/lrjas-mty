@@ -1,0 +1,65 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1>Proveedores</h1>
+      <p>Gestiona los proveedores registrados</p>
+    </div>
+  </div>
+
+  <div class="mini-stats">
+    <div class="mini-stat activo">
+      <span class="mini-valor">{{ totalActivos }}</span>
+      <span class="mini-label">Activos</span>
+    </div>
+    <div class="mini-stat pendiente">
+      <span class="mini-valor">{{ totalPendientes }}</span>
+      <span class="mini-label">Pendientes</span>
+    </div>
+    <div class="mini-stat total">
+      <span class="mini-valor">{{ proveedores.length }}</span>
+      <span class="mini-label">Total</span>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <div class="filtros-scroll">
+      <button
+        *ngFor="let cat of categorias"
+        [class.active]="filtroCategoria === cat"
+        (click)="filtroCategoria = cat"
+      >
+        {{ cat === 'todas' ? 'Todas' : cat }}
+      </button>
+    </div>
+    <input type="text" [(ngModel)]="busqueda" placeholder="🔍 Buscar empresa o contacto..." class="buscador" />
+  </div>
+
+  <div class="cards-grid">
+    <div class="proveedor-card" *ngFor="let p of proveedoresFiltrados">
+      <div class="card-top">
+        <div class="card-info">
+          <h3>{{ p.empresa }}</h3>
+          <span class="categoria">{{ p.categoria }}</span>
+        </div>
+        <span class="estado" [class]="p.estado">{{ p.estado }}</span>
+      </div>
+      <p class="descripcion">{{ p.descripcion }}</p>
+      <div class="contacto-info">
+        <span>{{ p.contacto }}</span>
+        <span>{{ p.telefono }}</span>
+        <span>✉️ {{ p.email }}</span>
+        <span>📅 Registrado: {{ p.fecha }}</span>
+      </div>
+      <div class="card-actions">
+        <button class="btn-accion aprobar" (click)="cambiarEstado(p, 'activo')" [disabled]="p.estado === 'activo'">Aprobar</button>
+        <button class="btn-accion rechazar" (click)="cambiarEstado(p, 'rechazado')" [disabled]="p.estado === 'rechazado'">Rechazar</button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="proveedoresFiltrados.length === 0">
+      <span>😕 No se encontraron proveedores</span>
+    </div>
+  </div>
+
+</div>

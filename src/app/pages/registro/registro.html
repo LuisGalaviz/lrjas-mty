@@ -1,0 +1,145 @@
+<div class="registro-page">
+
+  <nav class="top-nav">
+    <a routerLink="/" class="btn-volver">← Volver</a>
+    <span class="nav-title">LR JAS</span>
+    <span></span>
+  </nav>
+
+  <div class="confirmacion" *ngIf="enviado">
+    <div class="confirm-icon">✓</div>
+    <h2>Registro completado</h2>
+    <p>Hola <strong>{{ registro.nombre }} {{ registro.apellidos }}</strong>, tu registro ha sido recibido. Nos da gusto tenerte en el LR JAS Monterrey.</p>
+    <p class="confirm-sub">{{ registro.barrio }}, Estaca {{ registro.estaca }}</p>
+    <a routerLink="/" class="btn-primary">Volver al inicio</a>
+  </div>
+
+  <div class="form-container" *ngIf="!enviado">
+    <div class="form-header">
+      <span class="form-badge">Lugar de Reunion JAS Monterrey</span>
+      <h1>Registro de asistencia</h1>
+      <p>Completa tus datos para registrarte</p>
+    </div>
+
+    <div class="pasos">
+      <div class="paso-item" [class.activo]="paso >= 1" [class.completo]="paso > 1">
+        <div class="paso-num">{{ paso > 1 ? '✓' : '1' }}</div>
+        <span>Datos personales</span>
+      </div>
+      <div class="paso-linea" [class.activo]="paso > 1"></div>
+      <div class="paso-item" [class.activo]="paso >= 2" [class.completo]="paso > 2">
+        <div class="paso-num">{{ paso > 2 ? '✓' : '2' }}</div>
+        <span>Unidad</span>
+      </div>
+      <div class="paso-linea" [class.activo]="paso > 2"></div>
+      <div class="paso-item" [class.activo]="paso >= 3">
+        <div class="paso-num">3</div>
+        <span>Confirmar</span>
+      </div>
+    </div>
+
+    <!-- PASO 1 -->
+    <div class="form-step" *ngIf="paso === 1">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="registro.nombre" placeholder="Juan" />
+        </div>
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input type="text" [(ngModel)]="registro.apellidos" placeholder="Garcia Lopez" />
+        </div>
+      </div>
+      <div class="form-row">
+      <div class="form-group">
+        <label>Telefono</label>
+        <input type="tel" 
+         [(ngModel)]="registro.telefono" 
+         placeholder="81 1234 5678"
+         (ngModelChange)="verificarTelefono()" />
+        <span class="field-hint" *ngIf="telefonoDuplicado" style="color: red;">
+          ⚠ Este número ya está registrado
+        </span>
+      </div>
+        <div class="form-group">
+          <label>Fecha de nacimiento</label>
+          <input type="date" [(ngModel)]="registro.fechaNacimiento" [max]="fechaMaxima" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label-field">Eres miembro de la iglesia?</label>
+        <div class="radio-group">
+          <label class="radio-option" [class.selected]="registro.esMiembro === true">
+            <input type="radio" [value]="true" [(ngModel)]="registro.esMiembro" />
+            Si, soy miembro
+          </label>
+          <label class="radio-option" [class.selected]="registro.esMiembro === false">
+            <input type="radio" [value]="false" [(ngModel)]="registro.esMiembro" />
+            No
+          </label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <span></span>
+        <button class="btn-primary" 
+        (click)="siguientePaso()"
+        [disabled]="!registro.nombre || !registro.apellidos || !registro.telefono || !registro.fechaNacimiento || registro.esMiembro === null || telefonoDuplicado">
+        <!--                                                                                                           AGREGA ESTO ↑ -->
+        Siguiente →
+      </button>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="form-step" *ngIf="paso === 2">
+      <div class="form-group">
+        <label>Estaca</label>
+        <select [(ngModel)]="registro.estaca" (ngModelChange)="onEstacaChange()">
+          <option value="">Selecciona tu estaca</option>
+          <option *ngFor="let e of estacas" [value]="e">{{ e }}</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="barriosDisponibles.length > 0">
+        <label>Barrio</label>
+        <select [(ngModel)]="registro.barrio">
+          <option value="">Selecciona tu barrio</option>
+          <option *ngFor="let b of barriosDisponibles" [value]="b">{{ b }}</option>
+        </select>
+        <span class="field-hint">{{ barriosDisponibles.length }} barrios en la Estaca {{ registro.estaca }}</span>
+      </div>
+      <div class="estaca-placeholder" *ngIf="!registro.estaca">
+        <p>Selecciona primero tu estaca para ver los barrios disponibles</p>
+      </div>
+      <div class="form-actions">
+        <button class="btn-secondary" (click)="anteriorPaso()">← Atras</button>
+        <button class="btn-primary" (click)="siguientePaso()"
+          [disabled]="!registro.estaca || !registro.barrio">
+          Siguiente →
+        </button>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="form-step" *ngIf="paso === 3">
+      <div class="resumen">
+        <h3>Confirma tu informacion</h3>
+        <div class="resumen-item"><span>Nombre completo</span><strong>{{ registro.nombre }} {{ registro.apellidos }}</strong></div>
+        <div class="resumen-item"><span>Telefono</span><strong>{{ registro.telefono }}</strong></div>
+        <div class="resumen-item"><span>Fecha de nacimiento</span><strong>{{ registro.fechaNacimiento }}</strong></div>
+        <div class="resumen-item">
+          <span>Membresia</span>
+          <strong [class]="registro.esMiembro ? 'tag-miembro' : 'tag-investigador'">
+            {{ registro.esMiembro ? 'Miembro' : 'Investigador' }}
+          </strong>
+        </div>
+        <div class="resumen-item"><span>Estaca</span><strong>{{ registro.estaca }}</strong></div>
+        <div class="resumen-item"><span>Barrio</span><strong>{{ registro.barrio }}</strong></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-secondary" (click)="anteriorPaso()">← Atras</button>
+        <button class="btn-primary" (click)="enviar()">Confirmar registro</button>
+      </div>
+    </div>
+
+  </div>
+</div>

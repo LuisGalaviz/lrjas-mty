@@ -1,0 +1,390 @@
+:host {
+  --fondo: #F5F0E8;
+  --oscuro: #3D2817;
+  --cafe: #6B4A2A;
+  --cafe-claro: #8B7355;
+  --naranja: #E8671A;
+  --naranja-oscuro: #CC5A15;
+  --borde: #D8D2C5;
+  --crema-input: #E8DED0;
+  --texto: #2D2D2D;
+}
+
+.dudas-page {
+  min-height: 100vh;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+/* NAV */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3rem;
+  background: var(--oscuro);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--naranja);
+}
+
+.nav-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--naranja);
+  letter-spacing: 3px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #fff;
+}
+
+.btn-reservar {
+  background: var(--naranja) !important;
+  color: #fff !important;
+  padding: 0.6rem 1.5rem !important;
+  letter-spacing: 1px !important;
+}
+
+.btn-reservar:hover {
+  background: var(--naranja-oscuro) !important;
+}
+
+/* HERO */
+.hero {
+  background: var(--fondo);
+  padding: 4rem 3rem;
+  text-align: center;
+  border-bottom: 1px solid var(--borde);
+}
+
+.hero-label {
+  font-size: 0.7rem;
+  color: var(--naranja);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: var(--oscuro);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.hero h1 .highlight {
+  color: var(--naranja);
+}
+
+.hero p {
+  font-size: 1rem;
+  color: var(--cafe);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* TUTORIAL */
+.tutorial-section {
+  padding: 4rem 3rem;
+}
+
+.tutorial-container {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.seccion-titulo {
+  margin-bottom: 2.5rem;
+}
+
+.seccion-label {
+  font-size: 0.7rem;
+  color: var(--naranja);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.seccion-titulo h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--oscuro);
+  letter-spacing: 2px;
+}
+
+.pasos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--borde);
+  background: white;
+}
+
+.paso-card {
+  border-bottom: 1px solid var(--borde);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.paso-card:last-child {
+  border-bottom: none;
+}
+
+.paso-card:hover {
+  background: var(--crema-input);
+}
+
+.paso-card.abierto {
+  background: white;
+}
+
+.paso-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 2rem;
+}
+
+.paso-izquierda {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.paso-numero {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--naranja);
+  min-width: 2rem;
+  line-height: 1;
+}
+
+.paso-titulo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--oscuro);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.paso-chevron {
+  font-size: 1.5rem;
+  color: var(--cafe-claro);
+  font-weight: 300;
+  line-height: 1;
+  user-select: none;
+}
+
+.paso-body {
+  padding: 0 2rem 1.75rem 5rem;
+  border-top: 1px solid var(--borde);
+}
+
+.paso-descripcion {
+  color: var(--cafe);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+  padding-top: 1.25rem;
+}
+
+.btn-paso {
+  display: inline-block;
+  background: var(--naranja);
+  color: white;
+  padding: 0.65rem 1.5rem;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background 0.2s;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.btn-paso:hover {
+  background: var(--naranja-oscuro);
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: var(--borde);
+  margin: 0 3rem;
+}
+
+/* WHATSAPP */
+.whatsapp-section {
+  padding: 4rem 3rem;
+}
+
+.whatsapp-container {
+  max-width: 780px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: start;
+}
+
+.whatsapp-texto h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--oscuro);
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.whatsapp-texto p {
+  color: var(--cafe);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+
+.whatsapp-sub {
+  font-size: 0.82rem !important;
+  color: var(--cafe-claro) !important;
+  border-top: 1px solid var(--borde);
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.qr-bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.qr-placeholder {
+  width: 180px;
+  height: 180px;
+  border: 2px dashed var(--borde);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-label {
+  font-size: 0.72rem;
+  color: var(--cafe-claro);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.qr-hint {
+  font-size: 0.72rem;
+  color: var(--cafe-claro);
+  text-align: center;
+  max-width: 160px;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: var(--oscuro);
+  border-top: 1px solid var(--naranja);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.admin-link {
+  color: rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.admin-link:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .tutorial-section,
+  .whatsapp-section {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .divider {
+    margin: 0 1.5rem;
+  }
+
+  .whatsapp-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .qr-bloque {
+    align-items: flex-start;
+  }
+
+  .paso-body {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}

@@ -1,0 +1,218 @@
+<div class="ar-page">
+
+  <!-- NOTIFICACION -->
+  <div class="notificacion" *ngIf="notificacion">{{ notificacion }}</div>
+
+  <!-- MODAL: Confirmar eliminar persona -->
+  <div class="modal-overlay" *ngIf="personaAEliminar" (click)="cancelarEliminarPersona()">
+    <div class="modal-confirm" (click)="$event.stopPropagation()">
+      <div class="mc-icon">⚠️</div>
+      <h3>¿Eliminar persona?</h3>
+      <p>Esto eliminará a <strong>{{ personaAEliminar.nombre }} {{ personaAEliminar.apellidos }}</strong> del sistema, incluyendo todas sus asistencias e inscripciones a clases. Esta acción no se puede deshacer.</p>
+      <div class="mc-actions">
+        <button class="btn-cancelar" (click)="cancelarEliminarPersona()">Cancelar</button>
+        <button class="btn-eliminar" (click)="confirmarEliminarPersona()">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Confirmar desinscribir de clase -->
+  <div class="modal-overlay" *ngIf="inscripcionAEliminar" (click)="cancelarDesinscribir()">
+    <div class="modal-confirm" (click)="$event.stopPropagation()">
+      <div class="mc-icon">📋</div>
+      <h3>¿Quitar de la clase?</h3>
+      <p>Se retirará a <strong>{{ inscripcionAEliminar.nombreCompleto }}</strong> de la clase <strong>{{ inscripcionAEliminar.claseNombre }}</strong>. Podrá volver a inscribirse más adelante.</p>
+      <div class="mc-actions">
+        <button class="btn-cancelar" (click)="cancelarDesinscribir()">Cancelar</button>
+        <button class="btn-eliminar" (click)="confirmarDesinscribir()">Sí, quitar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="ar-header">
+    <div>
+      <h1>Registros</h1>
+      <p>Toda la información del sistema</p>
+    </div>
+    <div class="ar-header-actions">
+      <button class="btn-refresh" (click)="cargar()" title="Recargar datos">↺ Actualizar</button>
+      <button class="btn-export" (click)="exportarExcel()" title="Exportar a Excel">↓ Exportar Excel</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab" [class.activo]="vista === 'asistencias'" (click)="setVista('asistencias')">
+      Asistencias
+      <span class="tab-badge">{{ asistencias.length }}</span>
+    </button>
+    <button class="tab" [class.activo]="vista === 'registros'" (click)="setVista('registros')">
+      Personas registradas
+      <span class="tab-badge">{{ registros.length }}</span>
+    </button>
+    <button class="tab" [class.activo]="vista === 'clases'" (click)="setVista('clases')">
+      Inscripciones a clases
+      <span class="tab-badge">{{ inscripciones.length }}</span>
+    </button>
+  </div>
+
+  <!-- ===================== ASISTENCIAS ===================== -->
+  <div *ngIf="vista === 'asistencias'">
+
+    <div class="resumen-card" *ngIf="motivoResumen.length > 0">
+      <h3>Por motivo <span class="resumen-sub" *ngIf="hayFiltroActivo">(según filtros activos)</span></h3>
+      <div class="bar-list">
+        <div class="bar-item" *ngFor="let m of motivoResumen">
+          <div class="bar-label">
+            <span>{{ m.motivo }}</span>
+            <span class="bar-num">{{ m.cantidad }} &nbsp;({{ m.pct }}%)</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill naranja" [style.width.%]="m.pct"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <input type="text" [(ngModel)]="filtroNombre" placeholder="Filtrar por nombre..." />
+      <div class="rango-fechas">
+        <label>Desde</label>
+        <input type="date" [(ngModel)]="filtroFechaDesde" />
+        <label>Hasta</label>
+        <input type="date" [(ngModel)]="filtroFechaHasta" />
+      </div>
+    </div>
+
+    <div class="filtro-resultado" *ngIf="hayFiltroActivo">
+      {{ asistenciasFiltradas.length }} resultado{{ asistenciasFiltradas.length !== 1 ? 's' : '' }}
+      <button class="btn-limpiar" (click)="limpiarFiltros()">× Limpiar filtros</button>
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-header cols-3">
+        <span>Nombre</span>
+        <span>Motivo</span>
+        <span>Fecha y hora</span>
+      </div>
+      <div class="tabla-row cols-3" *ngFor="let a of asistenciasFiltradas">
+        <span class="t-nombre">{{ a.nombre }}</span>
+        <span class="t-tag">{{ a.motivo }}</span>
+        <span class="t-fecha">{{ formatFecha(a.fecha) }}</span>
+      </div>
+      <div class="tabla-empty" *ngIf="asistenciasFiltradas.length === 0">
+        Sin resultados
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== REGISTROS ===================== -->
+  <div *ngIf="vista === 'registros'">
+
+    <div class="filtros">
+      <input type="text" [(ngModel)]="filtroNombre" placeholder="Filtrar por nombre..." />
+    </div>
+
+    <div class="asistencias-hint" *ngIf="filtroNombre.trim() && registrosFiltrados.length > 0">
+      <div class="asist-row" *ngFor="let r of registrosFiltrados">
+        <span class="asist-nombre">{{ r.nombre }} {{ r.apellidos }}</span>
+        <span class="asist-badge">
+          {{ asistenciasDe(r.nombre + ' ' + r.apellidos) }} asistencia{{ asistenciasDe(r.nombre + ' ' + r.apellidos) !== 1 ? 's' : '' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-header cols-6">
+        <span>Nombre completo</span>
+        <span>Teléfono</span>
+        <span>Estaca</span>
+        <span>Barrio</span>
+        <span>Membresía</span>
+        <span></span>
+      </div>
+      <div class="tabla-row cols-6" *ngFor="let r of registrosFiltrados">
+        <span class="t-nombre">{{ r.nombre }} {{ r.apellidos }}</span>
+        <span class="t-tel">{{ r.telefono }}</span>
+        <span>{{ r.estaca }}</span>
+        <span>{{ r.barrio }}</span>
+        <span class="t-tag" [class.verde]="r.esMiembro">
+          {{ r.esMiembro ? 'Miembro' : 'Investigador' }}
+        </span>
+        <span class="t-acciones">
+          <button class="btn-eliminar-fila" (click)="pedirEliminarPersona(r)" title="Eliminar persona">🗑</button>
+        </span>
+      </div>
+      <div class="tabla-empty" *ngIf="registrosFiltrados.length === 0">
+        Sin resultados
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== CLASES ===================== -->
+  <div *ngIf="vista === 'clases'">
+
+    <div class="resumen-card" *ngIf="claseResumen.length > 0">
+      <h3>Inscripciones por clase <span class="resumen-sub" *ngIf="hayFiltroActivo">(según filtros activos)</span></h3>
+      <div class="bar-list">
+        <div class="bar-item" *ngFor="let c of claseResumen">
+          <div class="bar-label">
+            <span>{{ c.clase }}</span>
+            <span class="bar-num">{{ c.cantidad }} &nbsp;({{ c.pct }}%)</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill azul" [style.width.%]="c.pct"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <input type="text" [(ngModel)]="filtroNombre" placeholder="Filtrar por nombre..." />
+      <select [(ngModel)]="filtroClaseId" class="select-clase">
+        <option value="">Todas las clases</option>
+        <option *ngFor="let c of clasesDisponibles" [value]="c.id">{{ c.nombre }}</option>
+      </select>
+      <div class="rango-fechas">
+        <label>Desde</label>
+        <input type="date" [(ngModel)]="filtroFechaDesde" />
+        <label>Hasta</label>
+        <input type="date" [(ngModel)]="filtroFechaHasta" />
+      </div>
+    </div>
+
+    <div class="filtro-resultado" *ngIf="hayFiltroActivo">
+      {{ inscripcionesFiltradas.length }} resultado{{ inscripcionesFiltradas.length !== 1 ? 's' : '' }}
+      <button class="btn-limpiar" (click)="limpiarFiltros()">× Limpiar filtros</button>
+    </div>
+
+    <div class="tabla-wrap">
+      <div class="tabla-header cols-5">
+        <span>Persona</span>
+        <span>Clase</span>
+        <span>Asistencias</span>
+        <span>Fecha inscripción</span>
+        <span></span>
+      </div>
+      <div class="tabla-row cols-5" *ngFor="let i of inscripcionesFiltradas">
+        <span class="t-nombre">{{ i.nombreCompleto }}</span>
+        <span class="t-tag azul">{{ i.claseNombre }}</span>
+        <span class="t-asist">
+          <span class="badge-asist">{{ asistenciasEnRango(i.nombreCompleto) }}</span>
+        </span>
+        <span class="t-fecha">{{ formatFechaSolo(i.fechaInscripcion) }}</span>
+        <span class="t-acciones">
+          <button class="btn-eliminar-fila" (click)="pedirDesinscribir(i)" title="Quitar de la clase">✕</button>
+        </span>
+      </div>
+      <div class="tabla-empty" *ngIf="inscripcionesFiltradas.length === 0">
+        Sin resultados
+      </div>
+    </div>
+
+  </div>
+
+</div>

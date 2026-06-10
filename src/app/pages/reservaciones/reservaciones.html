@@ -1,0 +1,77 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1>📅 Reservaciones</h1>
+      <p>Gestiona todas las reservaciones del restaurante</p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="mini-stats">
+    <div class="mini-stat confirmada">
+      <span class="mini-valor">{{ totalConfirmadas }}</span>
+      <span class="mini-label">Confirmadas</span>
+    </div>
+    <div class="mini-stat pendiente">
+      <span class="mini-valor">{{ totalPendientes }}</span>
+      <span class="mini-label">Pendientes</span>
+    </div>
+    <div class="mini-stat cancelada">
+      <span class="mini-valor">{{ totalCanceladas }}</span>
+      <span class="mini-label">Canceladas</span>
+    </div>
+    <div class="mini-stat total">
+      <span class="mini-valor">{{ reservaciones.length }}</span>
+      <span class="mini-label">Total</span>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="filtros-tabs">
+      <button [class.active]="filtro === 'todas'" (click)="filtro = 'todas'">Todas</button>
+      <button [class.active]="filtro === 'pendiente'" (click)="filtro = 'pendiente'">Pendientes</button>
+      <button [class.active]="filtro === 'confirmada'" (click)="filtro = 'confirmada'">Confirmadas</button>
+      <button [class.active]="filtro === 'cancelada'" (click)="filtro = 'cancelada'">Canceladas</button>
+    </div>
+    <input type="text" [(ngModel)]="busqueda" placeholder="🔍 Buscar por nombre o teléfono..." class="buscador" />
+  </div>
+
+  <!-- TABLA -->
+  <div class="tabla-container">
+    <div class="tabla-header">
+      <span>Cliente</span>
+      <span>Fecha y hora</span>
+      <span>Personas</span>
+      <span>Ocasión</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="tabla-row" *ngFor="let r of reservacionesFiltradas">
+      <div class="cliente-info">
+        <span class="cliente-nombre">{{ r.nombre }}</span>
+        <span class="cliente-contacto">{{ r.telefono }}</span>
+        <span class="cliente-contacto">{{ r.email }}</span>
+        <span class="notas" *ngIf="r.notas">📝 {{ r.notas }}</span>
+      </div>
+      <div class="fecha-info">
+        <span>{{ r.fecha }}</span>
+        <span class="hora">{{ r.hora }}</span>
+      </div>
+      <span class="personas">👥 {{ r.personas }}</span>
+      <span class="ocasion">{{ r.ocasion }}</span>
+      <span class="estado" [class]="r.estado">{{ r.estado }}</span>
+      <div class="acciones">
+        <button class="btn-accion confirmar" (click)="cambiarEstado(r, 'confirmada')" [disabled]="r.estado === 'confirmada'">✓</button>
+        <button class="btn-accion cancelar" (click)="cambiarEstado(r, 'cancelada')" [disabled]="r.estado === 'cancelada'">✕</button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="reservacionesFiltradas.length === 0">
+      <span>No se encontraron reservaciones</span>
+    </div>
+  </div>
+
+</div>

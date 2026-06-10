@@ -1,0 +1,77 @@
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1>Candidatos</h1>
+      <p>Gestiona las solicitudes de empleo recibidas</p>
+    </div>
+  </div>
+
+  <div class="mini-stats">
+    <div class="mini-stat pendiente">
+      <span class="mini-valor">{{ totalPendientes }}</span>
+      <span class="mini-label">Pendientes</span>
+    </div>
+    <div class="mini-stat entrevista">
+      <span class="mini-valor">{{ totalEntrevista }}</span>
+      <span class="mini-label">En entrevista</span>
+    </div>
+    <div class="mini-stat contratado">
+      <span class="mini-valor">{{ totalContratados }}</span>
+      <span class="mini-label">Contratados</span>
+    </div>
+    <div class="mini-stat total">
+      <span class="mini-valor">{{ candidatos.length }}</span>
+      <span class="mini-label">Total solicitudes</span>
+    </div>
+  </div>
+
+  <div class="filtros">
+    <div class="filtros-scroll">
+      <button
+        *ngFor="let v of vacantesDisponibles"
+        [class.active]="filtroVacante === v"
+        (click)="filtroVacante = v"
+      >
+        {{ v === 'todas' ? 'Todas las vacantes' : v }}
+      </button>
+    </div>
+    <input type="text" [(ngModel)]="busqueda" placeholder="🔍 Buscar candidato..." class="buscador" />
+  </div>
+
+  <div class="cards-grid">
+    <div class="candidato-card" *ngFor="let c of candidatosFiltrados">
+      <div class="card-top">
+        <div class="candidato-avatar">{{ c.nombre.charAt(0) }}</div>
+        <div class="candidato-info">
+          <h3>{{ c.nombre }}</h3>
+          <span class="vacante-tag">{{ c.vacante }}</span>
+        </div>
+        <span class="estado" [class]="c.estado">{{ c.estado }}</span>
+      </div>
+      <div class="contacto-info">
+        <span>{{ c.telefono }}</span>
+        <span> {{ c.email }}</span>
+        <span> {{ c.fecha }}</span>
+      </div>
+      <div class="experiencia">
+        <label>Experiencia</label>
+        <p>{{ c.experiencia }}</p>
+      </div>
+      <div class="mensaje">
+        <label>Motivación</label>
+        <p>{{ c.mensaje }}</p>
+      </div>
+      <div class="card-actions">
+        <button class="btn-accion entrevista" (click)="cambiarEstado(c, 'entrevista')" [disabled]="c.estado === 'entrevista' || c.estado === 'contratado'">Entrevista</button>
+        <button class="btn-accion contratar" (click)="cambiarEstado(c, 'contratado')" [disabled]="c.estado === 'contratado'">Contratar</button>
+        <button class="btn-accion rechazar" (click)="cambiarEstado(c, 'rechazado')" [disabled]="c.estado === 'rechazado'">Rechazar</button>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="candidatosFiltrados.length === 0">
+      <span>No se encontraron candidatos</span>
+    </div>
+  </div>
+
+</div>
