@@ -28,13 +28,14 @@ export class RegistroComponent {
     barrio: ''
   };
 
-  estacas = ['Los Angeles', 'Libertad', 'Moderna', 'Andalucia'];
+  estacas = ['Los Angeles', 'Libertad', 'Moderna', 'Andalucia', 'Otra'];
 
   barrios: Record<string, string[]> = {
     'Los Angeles': ['La Silla', 'Monte Cristal', 'Tres Caminos', 'Nueva Aurora', 'Quince de Mayo', 'Valle Hermoso', 'Zaragoza'],
     'Libertad':    ['Bosques de San Miguel', 'Lomas de Pedregal', 'Los Puertos', 'Pedregal', 'San Miguel', 'San Rafael', 'Victoria'],
     'Moderna':     ['Fundidora', 'Casa Blanca', 'Estancia', 'Linda Vista', 'Nogalar'],
-    'Andalucia':   ['Juarez 1', 'Juarez 2', 'Tamaulipas', 'China', 'Las Espigas', 'Cadereyta']
+    'Andalucia':   ['Juarez 1', 'Juarez 2', 'Tamaulipas', 'China', 'Las Espigas', 'Cadereyta'],
+    'Otra':          ['General']
   };
 
   barriosDisponibles: string[] = [];
