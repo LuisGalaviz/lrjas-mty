@@ -18,7 +18,7 @@ export class App {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e: any) => {
-      this.showSidebar = e.url.startsWith('/admin');
+      this.showSidebar = e.url.startsWith('/admin/') || e.url === '/admin';
     });
   }
 }

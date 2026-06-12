@@ -15,3 +15,14 @@ main.with-sidebar {
   margin-left: 220px;
   background: var(--fondo);
 }
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  main.with-sidebar {
+    margin-left: 0;
+    padding: 1.25rem;
+  }
+}

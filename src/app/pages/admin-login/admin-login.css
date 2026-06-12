@@ -100,3 +100,18 @@ input::placeholder { color: rgba(0,0,0,0.3); }
 }
 
 .btn-login:hover { background: var(--naranja-oscuro); }
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 1.5rem;
+  }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-logo {
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+  }
+}

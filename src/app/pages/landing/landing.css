@@ -393,3 +393,101 @@
 }
 
 .admin-link:hover { color: rgba(255,255,255,0.4); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+  .nav {
+    padding: 1rem 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .nav-links {
+    gap: 1.25rem;
+  }
+
+  .nav-links a {
+    font-size: 0.62rem;
+  }
+
+  .btn-reservar {
+    padding: 0.5rem 1rem !important;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 3rem 1.5rem 5rem;
+    display: block;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+    letter-spacing: 1px;
+  }
+
+  .hero-content p {
+    font-size: 0.85rem;
+    max-width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .hero-badge {
+    position: static;
+    margin-top: 2.5rem;
+    width: fit-content;
+  }
+
+  .hero::after {
+    width: 280px;
+    height: 280px;
+    right: -100px;
+  }
+
+  .concepto {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .concepto-texto h2 {
+    font-size: 2rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 2.5rem 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .card:last-child {
+    border-bottom: none;
+  }
+
+  .reserva-cta {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .cta-content h2 {
+    font-size: 2.2rem;
+  }
+
+  .footer {
+    padding: 1.25rem 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}
